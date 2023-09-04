@@ -6,11 +6,12 @@ import React, {
   useMemo,
   useRef,
 } from 'react';
-import { NativeModules, requireNativeComponent } from 'react-native';
+import { NativeModules } from 'react-native';
 
 import { MapboxGLEvent } from '../types';
 import { makeLatLngBounds, makePoint } from '../utils/geoUtils';
 import { type NativeRefType } from '../utils/nativeRef';
+import NativeCameraView from '../specs/MBXCameraNativeComponent';
 
 const NativeModule = NativeModules.MGLModule;
 
@@ -55,8 +56,6 @@ const nativeAnimationMode = (
       return NativeCameraModes.Ease;
   }
 };
-
-export const NATIVE_MODULE_NAME = 'RCTMGLCamera';
 
 // Native module types.
 
@@ -537,10 +536,11 @@ export const Camera = memo(
         zoomTo,
       }));
 
+      // TODO: align the type of `onUserTrackingModeChange` between this file and the spec
       return (
         <RCTMGLCamera
           testID={'Camera'}
-          ref={nativeCamera}
+          ref={nativeCamera as any}
           stop={nativeStop}
           animationDuration={animationDuration}
           animationMode={animationMode}
@@ -554,14 +554,13 @@ export const Camera = memo(
           minZoomLevel={minZoomLevel}
           maxZoomLevel={maxZoomLevel}
           maxBounds={nativeMaxBounds}
-          onUserTrackingModeChange={onUserTrackingModeChange}
+          onUserTrackingModeChange={onUserTrackingModeChange as any}
         />
       );
     },
   ),
 );
 
-const RCTMGLCamera =
-  requireNativeComponent<NativeCameraProps>(NATIVE_MODULE_NAME);
+const RCTMGLCamera = NativeCameraView;
 
 export type Camera = CameraRef;
