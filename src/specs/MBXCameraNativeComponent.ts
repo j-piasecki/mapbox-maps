@@ -3,7 +3,7 @@ import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNati
 import {
   DirectEventHandler,
   Double,
-  WithDefault,
+  Int32,
 } from 'react-native/Libraries/Types/CodegenTypes';
 
 import type { UnsafeMixed } from './codegenUtils';
@@ -32,6 +32,7 @@ export interface NativeProps extends ViewProps {
   animationDuration?: Double;
   animationMode?: string;
   defaultStop?: NativeCameraStop | null;
+  userTrackingMode?: Int32;
 
   followUserLocation?: boolean;
   followUserMode?: string;
@@ -40,6 +41,7 @@ export interface NativeProps extends ViewProps {
   followHeading?: Double;
   followPadding?: UnsafeMixed;
 
+  zoomLevel?: Double;
   maxZoomLevel?: Double;
   minZoomLevel?: Double;
   onUserTrackingModeChange?: DirectEventHandler<UserTrackingModeChangeEventType>;

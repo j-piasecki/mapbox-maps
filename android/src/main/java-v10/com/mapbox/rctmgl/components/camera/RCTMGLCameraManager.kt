@@ -1,8 +1,10 @@
 package com.mapbox.rctmgl.components.camera
+import com.facebook.react.bridge.Dynamic
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReadableMap
 import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.annotations.ReactProp
+import com.facebook.react.viewmanagers.MBXCameraManagerInterface
 import com.mapbox.geojson.FeatureCollection
 import com.mapbox.rctmgl.components.AbstractEventEmitter
 import com.mapbox.rctmgl.components.camera.CameraStop.Companion.fromReadableMap
@@ -12,7 +14,7 @@ import com.mapbox.rctmgl.utils.GeoJSONUtils.toLatLngBounds
 class RCTMGLCameraManager(private val mContext: ReactApplicationContext) :
     AbstractEventEmitter<RCTMGLCamera?>(
         mContext
-    ) {
+    ), MBXCameraManagerInterface<RCTMGLCamera> {
     override fun customEvents(): Map<String, String>? {
         return HashMap()
     }
@@ -26,7 +28,7 @@ class RCTMGLCameraManager(private val mContext: ReactApplicationContext) :
     }
 
     @ReactProp(name = "stop")
-    fun setStop(camera: RCTMGLCamera, map: ReadableMap?) {
+    override fun setStop(camera: RCTMGLCamera, map: ReadableMap?) {
         if (map != null) {
             val stop = fromReadableMap(mContext, map, null)
             camera.setStop(stop)
@@ -34,7 +36,7 @@ class RCTMGLCameraManager(private val mContext: ReactApplicationContext) :
     }
 
     @ReactProp(name = "defaultStop")
-    fun setDefaultStop(camera: RCTMGLCamera, map: ReadableMap?) {
+    override fun setDefaultStop(camera: RCTMGLCamera, map: ReadableMap?) {
         if (map != null) {
             val stop = fromReadableMap(mContext, map, null)
             camera.setDefaultStop(stop)
@@ -42,58 +44,58 @@ class RCTMGLCameraManager(private val mContext: ReactApplicationContext) :
     }
 
     @ReactProp(name = "userTrackingMode")
-    fun setUserTrackingMode(camera: RCTMGLCamera, userTrackingMode: Int) {
+    override fun setUserTrackingMode(camera: RCTMGLCamera, userTrackingMode: Int) {
         camera.setUserTrackingMode(userTrackingMode)
         throw AssertionError("Unused code")
     }
 
     @ReactProp(name = "zoomLevel")
-    fun setZoomLevel(camera: RCTMGLCamera, zoomLevel: Double) {
+    override fun setZoomLevel(camera: RCTMGLCamera, zoomLevel: Double) {
         camera.setZoomLevel(zoomLevel)
     }
 
     @ReactProp(name = "minZoomLevel")
-    fun setMinZoomLevel(camera: RCTMGLCamera, value: Double) {
+    override fun setMinZoomLevel(camera: RCTMGLCamera, value: Double) {
         camera.setMinZoomLevel(value)
     }
 
     @ReactProp(name = "maxZoomLevel")
-    fun setMaxZoomLevel(camera: RCTMGLCamera, value: Double) {
+    override fun setMaxZoomLevel(camera: RCTMGLCamera, value: Double) {
         camera.setMaxZoomLevel(value)
     }
 
     @ReactProp(name = "followUserLocation")
-    fun setFollowUserLocation(camera: RCTMGLCamera, value: Boolean) {
+    override fun setFollowUserLocation(camera: RCTMGLCamera, value: Boolean) {
         camera.setFollowUserLocation(value)
     }
 
     @ReactProp(name = "followUserMode")
-    fun setFollowUserMode(camera: RCTMGLCamera, value: String?) {
+    override fun setFollowUserMode(camera: RCTMGLCamera, value: String?) {
         camera.setFollowUserMode(value)
     }
 
     @ReactProp(name = "followZoomLevel")
-    fun setFollowZoomLevel(camera: RCTMGLCamera, value: Double) {
+    override fun setFollowZoomLevel(camera: RCTMGLCamera, value: Double) {
         camera.setFollowZoomLevel(value)
     }
 
     @ReactProp(name = "followPitch")
-    fun setFollowPitch(camera: RCTMGLCamera, value: Double) {
+    override fun setFollowPitch(camera: RCTMGLCamera, value: Double) {
         camera.setFollowPitch(value)
     }
 
     @ReactProp(name = "followHeading")
-    fun setFollowHeading(camera: RCTMGLCamera, value: Double) {
+    override fun setFollowHeading(camera: RCTMGLCamera, value: Double) {
         camera.setFollowHeading(value)
     }
 
     @ReactProp(name = "followPadding")
-    fun setFollowPadding(camera: RCTMGLCamera, value: ReadableMap) {
-        camera.setFollowPadding(value)
+    override fun setFollowPadding(camera: RCTMGLCamera, value: Dynamic) {
+        camera.setFollowPadding(value.asMap())
     }
 
     @ReactProp(name = "maxBounds")
-    fun setMaxBounds(camera: RCTMGLCamera, value: String?) {
+    override fun setMaxBounds(camera: RCTMGLCamera, value: String?) {
         if (value != null) {
             val collection = FeatureCollection.fromJson(value)
             camera.setMaxBounds(toLatLngBounds(collection))
@@ -102,7 +104,15 @@ class RCTMGLCameraManager(private val mContext: ReactApplicationContext) :
         }
     }
 
+    override fun setAnimationDuration(view: RCTMGLCamera?, value: Double) {
+        // no-op on Android
+    }
+
+    override fun setAnimationMode(view: RCTMGLCamera?, value: String?) {
+        // no-op on Android
+    }
+
     companion object {
-        const val REACT_CLASS = "RCTMGLCamera"
+        const val REACT_CLASS = "MBXCamera"
     }
 }
