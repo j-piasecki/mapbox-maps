@@ -174,7 +174,7 @@ using namespace facebook::react;
     [_view setReactCompassPosition:[self convertPositionToDictionary:&newProps.compassPosition]];
     [_view setReactCompassViewPosition:newProps.compassViewPosition];
     [_view setReactCompassViewMargins:CGPointMake(newProps.compassViewMargins.x, newProps.compassViewMargins.y)];
-    [_view setReactCompassImage:[NSString stringWithUTF8String:newProps.compassImage.c_str()]];
+    [_view setReactCompassImage:RCTNSStringFromStringNilIfEmpty(newProps.compassImage)];
 
     [_view setReactScaleBarEnabled:newProps.scaleBarEnabled];
     [_view setReactScaleBarPosition:[self convertPositionToDictionary:&newProps.scaleBarPosition]];
@@ -185,7 +185,7 @@ using namespace facebook::react;
     [_view setReactPitchEnabled:newProps.pitchEnabled];
 
     [_view setReactProjection:newProps.projection == MBXMapViewProjection::Mercator ? @"mercator" : @"globe"];
-    [_view setReactStyleURL:[NSString stringWithUTF8String:newProps.styleURL.c_str()]];
+    [_view setReactStyleURL:RCTNSStringFromStringNilIfEmpty(newProps.styleURL)];
 
     if (!newProps.localizeLabels.locale.empty()) {
         [_view setReactLocalizeLabels:[self convertLocalizeLabels:&newProps.localizeLabels]];
